@@ -15,6 +15,8 @@ apt install docker.io
 docker --version
 ```
 
+```Docker version 20.10.21, build 20.10.21-0ubuntu1~18.04.3```
+
 Поднятие контейнера из командной строки 
 
 ```bash
