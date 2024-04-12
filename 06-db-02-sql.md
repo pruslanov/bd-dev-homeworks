@@ -39,6 +39,30 @@ docker ps -a
 
 ![Поверка запуска контейнера postgres](img/hw-db-02-002.png)
 
+```bash
+docker inspect pg_docker | grep "IPAddress"
+```
+
+```
+"SecondaryIPAddresses": null,
+            "IPAddress": "172.17.0.2",
+                    "IPAddress": "172.17.0.2",
+```
+
+```bash
+psql -h 172.17.0.2 -U postgres
+```
+
+```
+Password for user postgres: 
+psql (10.23 (Ubuntu 10.23-0ubuntu0.18.04.2), server 12.18 (Debian 12.18-1.pgdg120+2))
+WARNING: psql major version 10, server major version 12.
+         Some psql features might not work.
+Type "help" for help.
+
+postgres=# 
+```
+
 ## Задача 2
 
 В БД из задачи 1: 
