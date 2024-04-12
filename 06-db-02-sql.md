@@ -58,7 +58,31 @@ psql -h 172.17.0.2 -U postgres
 В БД из задачи 1: 
 
 - создайте пользователя test-admin-user и БД test_db;
+
+```sql
+CREATE DATABASE test_db;
+CREATE USER "test-admin-user";
+```
+
 - в БД test_db создайте таблицу orders и clients (спeцификация таблиц ниже);
+
+```sql
+CREATE TABLE orders (
+	order_id serial PRIMARY KEY,
+	order_name	varchar(25),
+	price integer
+);
+CREATE TABLE clients (
+    client_id serial PRIMARY KEY,
+    client_last_name varchar(45),
+	country	varchar(35),
+	order_id integer REFERENCES orders
+);
+CREATE INDEX country_index ON clients(country);
+```
+
+![Создание БД test_db, пользователя test-admin-user, создание таблиц orders и clients ](img/hw-db-02-004.png)
+
 - предоставьте привилегии на все операции пользователю test-admin-user на таблицы БД test_db;
 - создайте пользователя test-simple-user;
 - предоставьте пользователю test-simple-user права на SELECT/INSERT/UPDATE/DELETE этих таблиц БД test_db.
@@ -75,6 +99,29 @@ psql -h 172.17.0.2 -U postgres
 - фамилия (string);
 - страна проживания (string, index);
 - заказ (foreign key orders).
+
+
+```sql
+CREATE DATABASE test_db 
+CREATE USER "test-admin-user";
+CREATE USER "test-simple-user";
+CREATE TABLE orders (
+	id	serial PRIMARY KEY,
+	order_name	varchar(25) NOT NULL CHECK (order_name <> ''),
+	price	integer NOT NULL CHECK (price > 0)
+);
+CREATE TABLE clients (
+        id      serial PRIMARY KEY,
+        last_name	varchar(45) NOT NULL CHECK (last_name <> ''),
+	country	varchar(35) NOT NULL CHECK (country <> ''),
+	order_number	integer REFERENCES orders
+);
+CREATE INDEX country_index ON clients(country);
+GRANT ALL ON ALL TABLES IN SCHEMA "public" TO "test-admin-user";
+GRANT SELECT, INSERT, UPDATE, DELETE 
+	ON ALL TABLES IN SCHEMA "public" 
+	TO "test-simple-user";
+```
 
 Приведите:
 
