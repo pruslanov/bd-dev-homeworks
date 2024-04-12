@@ -10,7 +10,31 @@
 Используя Docker, поднимите инстанс PostgreSQL (версию 12) c 2 volume, 
 в который будут складываться данные БД и бэкапы.
 
+```bash
+apt install docker.io
+docker --version
+```
+
+Поднятие контейнера из командной строки 
+
+```bash
+docker run -d --name pg_docker \
+-e POSTGRES_PASSWORD=postgres \
+-p 5432:5432 \
+-v $HOME/docker/volumes/postgres/data:/var/lib/postgresql/data \
+-v $HOME/docker/volumes/postgres/bckp:/var/lib/postgresql/bckp \
+postgres:12
+
+```
+
+![Поднятие контейнера из командной строки](img/hw-db-02-001.png)
+
 Приведите получившуюся команду или docker-compose-манифест.
+
+```bash
+docker ps -a
+```
+![ПРоверка запуска контейнера postgres](img/hw-db-02-002.png)
 
 ## Задача 2
 
