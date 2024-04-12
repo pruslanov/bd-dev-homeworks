@@ -66,6 +66,19 @@ CREATE USER "test-admin-user";
 
 - в БД test_db создайте таблицу orders и clients (спeцификация таблиц ниже);
 
+Таблица orders:
+
+- id (serial primary key);
+- наименование (string);
+- цена (integer).
+
+Таблица clients:
+
+- id (serial primary key);
+- фамилия (string);
+- страна проживания (string, index);
+- заказ (foreign key orders).
+
 ```sql
 CREATE TABLE orders (
 	order_id serial PRIMARY KEY,
@@ -87,41 +100,15 @@ CREATE INDEX country_index ON clients(country);
 - создайте пользователя test-simple-user;
 - предоставьте пользователю test-simple-user права на SELECT/INSERT/UPDATE/DELETE этих таблиц БД test_db.
 
-Таблица orders:
-
-- id (serial primary key);
-- наименование (string);
-- цена (integer).
-
-Таблица clients:
-
-- id (serial primary key);
-- фамилия (string);
-- страна проживания (string, index);
-- заказ (foreign key orders).
-
-
 ```sql
-CREATE DATABASE test_db 
-CREATE USER "test-admin-user";
-CREATE USER "test-simple-user";
-CREATE TABLE orders (
-	id	serial PRIMARY KEY,
-	order_name	varchar(25) NOT NULL CHECK (order_name <> ''),
-	price	integer NOT NULL CHECK (price > 0)
-);
-CREATE TABLE clients (
-        id      serial PRIMARY KEY,
-        last_name	varchar(45) NOT NULL CHECK (last_name <> ''),
-	country	varchar(35) NOT NULL CHECK (country <> ''),
-	order_number	integer REFERENCES orders
-);
-CREATE INDEX country_index ON clients(country);
 GRANT ALL ON ALL TABLES IN SCHEMA "public" TO "test-admin-user";
+CREATE USER "test-simple-user";
 GRANT SELECT, INSERT, UPDATE, DELETE 
 	ON ALL TABLES IN SCHEMA "public" 
 	TO "test-simple-user";
 ```
+
+![Установка привелегий для пользователей test-admin-user и test-simple-user](img/hw-db-02-005.png)
 
 Приведите:
 
