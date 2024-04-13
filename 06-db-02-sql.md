@@ -64,6 +64,16 @@ CREATE DATABASE test_db;
 CREATE USER "test-admin-user";
 ```
 
+![Создание БД test_db, пользователя test-admin-user](img/hw-db-02-006.png)
+
+Выводим список БД
+
+```bash
+postgres=# \l
+```
+
+![Выводим список БД](img/hw-db-02-007.png)
+
 - в БД test_db создайте таблицу orders и clients (спeцификация таблиц ниже);
 
 Таблица orders:
@@ -78,6 +88,16 @@ CREATE USER "test-admin-user";
 - фамилия (string);
 - страна проживания (string, index);
 - заказ (foreign key orders).
+
+> Переключаемся в базу test_db
+
+```bash
+postgres=# \c test_db;
+```
+
+![Переключаемся в базу test_db](img/hw-db-02-008.png)
+
+> Создаем таблицы
 
 ```sql
 CREATE TABLE orders (
@@ -94,21 +114,29 @@ CREATE TABLE clients (
 CREATE INDEX country_index ON clients(country);
 ```
 
-![Создание БД test_db, пользователя test-admin-user, создание таблиц orders и clients ](img/hw-db-02-004.png)
+![Создание таблиц orders и clients ](img/hw-db-02-009.png)
 
 - предоставьте привилегии на все операции пользователю test-admin-user на таблицы БД test_db;
-- создайте пользователя test-simple-user;
-- предоставьте пользователю test-simple-user права на SELECT/INSERT/UPDATE/DELETE этих таблиц БД test_db.
 
 ```sql
 GRANT ALL ON ALL TABLES IN SCHEMA "public" TO "test-admin-user";
+```
+
+- создайте пользователя test-simple-user;
+
+```sql
 CREATE USER "test-simple-user";
+```
+
+- предоставьте пользователю test-simple-user права на SELECT/INSERT/UPDATE/DELETE этих таблиц БД test_db.
+
+```sql
 GRANT SELECT, INSERT, UPDATE, DELETE 
 	ON ALL TABLES IN SCHEMA "public" 
 	TO "test-simple-user";
 ```
 
-![Установка привелегий для пользователей test-admin-user и test-simple-user](img/hw-db-02-005.png)
+![Установка привелегий для пользователей test-admin-user и test-simple-user](img/hw-db-02-010.png)
 
 Приведите:
 
@@ -116,6 +144,12 @@ GRANT SELECT, INSERT, UPDATE, DELETE
 - описание таблиц (describe);
 - SQL-запрос для выдачи списка пользователей с правами над таблицами test_db;
 - список пользователей с правами над таблицами test_db.
+
+```sql
+SELECT grantee, table_catalog, table_name, privilege_type
+FROM information_schema.table_privileges
+WHERE table_catalog = 'test_db'
+```
 
 ## Задача 3
 
