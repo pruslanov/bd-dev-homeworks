@@ -57,7 +57,7 @@ psql -h 172.17.0.2 -U postgres
 Альтернативный способ подключения кконтейнеру и клиенту `psql`
 
 ```bash
-docker exec -it pg_docker psql -U postgres test_db
+docker exec -it pg_docker psql -U postgres
 ```
 
 
@@ -194,8 +194,35 @@ WHERE table_catalog = 'test_db';
 |Ронни Джеймс Дио| Russia|
 |Ritchie Blackmore| Russia|
 
+
+```sql
+INSERT INTO orders 
+	VALUES (1, 'Шоколад', 10), 
+		(2, 'Принтер', 3000), 
+		(3, 'Книга', 500), 
+		(4, 'Монитор', 7000), 
+		(5, 'Гитара', 4000);
+INSERT INTO clients
+	VALUES (1, 'Иванов Иван Иванович', 'USA'),
+		(2, 'Петров Петр Петрович', 'Canada'),
+		(3, 'Иоганн Себастьян Бах', 'Japan'),
+		(4, 'Ронни Джеймс Дио', 'Russia'),
+		(5, 'Ritchie Blackmore', 'Russia');
+```
+
+![Вставка данных в таблицы](img/hw-db-02-013.png)
+
 Используя SQL-синтаксис:
 - вычислите количество записей для каждой таблицы.
+
+```sql
+SELECT * FROM orders;
+SELECT * FROM clients;
+SELECT COUNT(*) FROM orders;
+SELECT COUNT(*) FROM clients;
+```
+
+![ПРоверка вставки и подсчет строк](img/hw-db-02-014.png)
 
 Приведите в ответе:
 
