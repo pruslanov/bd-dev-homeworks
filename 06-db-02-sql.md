@@ -241,9 +241,22 @@ SELECT COUNT(*) FROM clients;
 |Петров Петр Петрович| Монитор |
 |Иоганн Себастьян Бах| Гитара |
 
+```sql
+UPDATE clients SET order_id=3 WHERE client_id=1;
+UPDATE clients SET order_id=4 WHERE client_id=2;
+UPDATE clients SET order_id=5 WHERE client_id=3;
+```
+
 Приведите SQL-запросы для выполнения этих операций.
 
 Приведите SQL-запрос для выдачи всех пользователей, которые совершили заказ, а также вывод этого запроса.
+
+```sql
+SELECT * FROM clients;
+SELECT * FROM clients WHERE order_id IS NOT NULL;
+```
+
+![UPDATE orders и вывод](img/hw-db-02-015.png)
  
 Подсказка: используйте директиву `UPDATE`.
 
