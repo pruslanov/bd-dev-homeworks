@@ -53,6 +53,14 @@ psql -h 172.17.0.2 -U postgres
 
 ![Подключение в базе контейнера postgres](img/hw-db-02-003.png)
 
+
+Альтернативный способ подключения кконтейнеру и клиенту `psql`
+
+```bash
+docker exec -it pg_docker psql -U postgres test_db
+```
+
+
 ## Задача 2
 
 В БД из задачи 1: 
