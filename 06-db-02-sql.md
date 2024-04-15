@@ -73,10 +73,10 @@ CREATE USER "test-admin-user";
 
 ![Создание БД test_db, пользователя test-admin-user](img/hw-db-02-006.png)
 
-Выводим список БД
+Выводим список БД в командной строке psql клиента
 
 ```bash
-postgres=# \l
+\l
 ```
 
 ![Выводим список БД](img/hw-db-02-007.png)
@@ -96,10 +96,10 @@ postgres=# \l
 - страна проживания (string, index);
 - заказ (foreign key orders).
 
-> Переключаемся в базу test_db
+> Переключаемся в базу test_db в командной строке psql клиента
 
 ```bash
-postgres=# \c test_db;
+\c test_db;
 ```
 
 ![Переключаемся в базу test_db](img/hw-db-02-008.png)
@@ -150,10 +150,12 @@ GRANT SELECT, INSERT, UPDATE, DELETE
 - итоговый список БД после выполнения пунктов выше;
 - описание таблиц (describe);
 
+Команды в командной строке psql клиента
+
 ```bash
-test_db=# \l
-test_db=# \d+ orders
-test_db=# \d+ clients
+\l
+\d+ orders
+\d+ clients
 ```
 
 ![Список БД и описание таблиц orders и clients](img/hw-db-02-011.png)
