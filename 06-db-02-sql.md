@@ -142,14 +142,25 @@ GRANT SELECT, INSERT, UPDATE, DELETE
 
 - итоговый список БД после выполнения пунктов выше;
 - описание таблиц (describe);
+
+```bash
+test_db=# \l
+test_db=# \d+ orders
+test_db=# \d+ clients
+```
+
+![Список БД и описание таблиц orders и clients](img/hw-db-02-011.png)
+
 - SQL-запрос для выдачи списка пользователей с правами над таблицами test_db;
 - список пользователей с правами над таблицами test_db.
 
 ```sql
-SELECT grantee, table_catalog, table_name, privilege_type
+SELECT DISTINCT grantee
 FROM information_schema.table_privileges
-WHERE table_catalog = 'test_db'
+WHERE table_catalog = 'test_db';
 ```
+
+![Cписок пользователей с правами над таблицами test_db](img/hw-db-02-012.png)
 
 ## Задача 3
 
