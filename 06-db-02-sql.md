@@ -265,7 +265,15 @@ SELECT * FROM clients WHERE order_id IS NOT NULL;
 Получите полную информацию по выполнению запроса выдачи всех пользователей из задачи 4 
 (используя директиву EXPLAIN).
 
+```sql
+EXPLAIN (FORMAT YAML) SELECT * FROM clients WHERE order_id IS NOT NULL;
+```
+
 Приведите получившийся результат и объясните, что значат полученные значения.
+
+![EXPLAIN clients](img/hw-db-02-016.png)
+
+Total Cost: 13.50 - ожидаемая стоимость выполнения оператора `SELECT`
 
 ## Задача 6
 
