@@ -17,49 +17,48 @@ docker --version
 
 ```Docker version 20.10.21, build 20.10.21-0ubuntu1~18.04.3```
 
-Поднятие контейнера из командной строки 
+Поднятие контейнера `docker-compose.yml`
 
-```bash
-docker run -d --name pg_docker \
--e POSTGRES_PASSWORD=postgres \
--p 5432:5432 \
--v $HOME/docker/volumes/postgres/data:/var/lib/postgresql/data \
--v $HOME/docker/volumes/postgres/bckp:/var/lib/postgresql/bckp \
-postgres:12
+```yaml
+version: '3.9'
+
+volumes:
+  postgressql_data:
+  backup_postgressql_data:
+
+services:
+
+  postgressql:
+    #image: postgres:12-bullseye 
+    image: postgres:12
+    container_name: postgressql
+    environment:
+      - PGDATA=/var/lib/postgresql/data/
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgressql_data:/var/lib/postgresql/data
+      - backup_postgressql_data:/backup
+      - ./config:/docker-entrypoint-initdb.d
+    network_mode: "host"
 
 ```
-
-![Поднятие контейнера postgres из командной строки](img/hw-db-02-001.png)
 
 Приведите получившуюся команду или docker-compose-манифест.
 
 ```bash
+docker compose up
 docker ps -a
+docker volume ls
+
 ```
 
-![Поверка запуска контейнера postgres](img/hw-db-02-002.png)
-
-Получение адреса контейнера
+![Поверка запуска контейнера postgres](img/hw-db-02-019.png)
 
 ```bash
-docker inspect pg_docker | grep "IPAddress"
+docker exec -it postgressql psql -U postgres
 ```
 
-Подключение к базе контейнера
-
-```bash
-psql -h 172.17.0.2 -U postgres
-```
-
-![Подключение в базе контейнера postgres](img/hw-db-02-003.png)
-
-
-Альтернативный способ подключения кконтейнеру и клиенту `psql`
-
-```bash
-docker exec -it pg_docker psql -U postgres
-```
-
+![Подключение в базе контейнера postgres](img/hw-db-02-020.png)
 
 ## Задача 2
 
@@ -289,6 +288,11 @@ EXPLAIN (FORMAT YAML) SELECT * FROM clients WHERE order_id IS NOT NULL;
 pg_dump -h 172.17.0.2 -U postgres test_db > $HOME/docker/volumes/postgres/bckp/test_db_bckp.sql
 ```
 
+```bash
+docker exec -t pg_docker pg_dumpall -c -U postgres \
+> dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql
+```
+
 ![pg_dump test_db](img/hw-db-02-017.png)
 
 Остановите контейнер с PostgreSQL, но не удаляйте volumes.
@@ -327,5 +331,31 @@ psql -h 172.17.0.2 -U postgres test_db -f $HOME/docker/volumes/postgres/bckp/tes
 Выполненное домашнее задание пришлите ссылкой на .md-файл в вашем репозитории.
 
 ---
+
+СПРАВОЧНО
+
+Поднятие контейнера из командной строки 
+
+```bash
+docker run -d --name pg_docker \
+-e POSTGRES_PASSWORD=postgres \
+-p 5432:5432 \
+-v $HOME/docker/volumes/postgres/data:/var/lib/postgresql/data \
+-v $HOME/docker/volumes/postgres/bckp:/var/lib/postgresql/bckp \
+postgres:12
+
+```
+
+Получение адреса контейнера
+
+```bash
+docker inspect postgressql | grep "IPAddress"
+```
+
+Подключение к базе контейнера
+
+```bash
+psql -h 172.17.0.2 -U postgres
+```
 
 
