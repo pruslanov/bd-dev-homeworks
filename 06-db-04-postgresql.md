@@ -166,7 +166,27 @@ commit;
 
 Используя утилиту `pg_dump`, создайте бекап БД `test_database`.
 
+> Создание бекапа на хост машине
+
+```bash
+docker exec -t postgressql13 pg_dump -c -U postgres test_database > dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql
+```
+
+> Создание бекапа внутри контейнера
+
+```bash
+docker exec -it postgressql13 bash
+pg_dump -c -U postgres test_database > /backup/dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql
+ls /backup
+```
+
+![Создание бекап БД test_database через утилиту pg_dump](img/hw-db-04-008.png)
+
 Как бы вы доработали бэкап-файл, чтобы добавить уникальность значения столбца `title` для таблиц `test_database`?
+
+> Ответ
+
+Можно создать индекс для столбца `title`, для обеспечения уникальности.
 
 ---
 
