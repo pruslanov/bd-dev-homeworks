@@ -81,9 +81,31 @@ docker volume ls
 
 Используя `psql`, создайте БД `test_database`.
 
+> Подключаемся к контейнеру `postgressql13` к клиенту `psql`
+
+```bash
+docker exec -it postgressql13 psql -U postgres
+```
+
+```sql
+CREATE DATABASE test_database;
+```
+![Подключаемся postgressql13 к клиенту psql и создаем БД test_database](img/hw-db-04-003.png)
+
 Изучите [бэкап БД](https://github.com/netology-code/virt-homeworks/tree/virt-11/06-db-04-postgresql/test_data).
 
 Восстановите бэкап БД в `test_database`.
+
+> Переписываем файл бекапа в контейнер
+
+```bash
+docker cp /home/ruslanov/projects/bd-dev-homeworks/test_dump.sql  postgressql13:/backup
+docker exec -it postgressql13 bash
+ls /backup/
+psql -U postgres -f /backup/test_dump.sql test_database
+```
+
+![Переписываем файл test_dump.sql в контейнер и делаем восстановление](img/hw-db-04-004.png)
 
 Перейдите в управляющую консоль `psql` внутри контейнера.
 
