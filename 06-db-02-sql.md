@@ -355,7 +355,7 @@ docker exec -it postgressql psql -U postgres
 
 ```bash
 docker exec -it postgressql bash
-/# ls /backup/
+/$ ls /backup/
 psql -U postgres -f /backup/backup_15-04-2024
 ```
 
