@@ -286,45 +286,102 @@ EXPLAIN (FORMAT YAML) SELECT * FROM clients WHERE order_id IS NOT NULL;
 
 Создайте бэкап БД test_db и поместите его в volume, предназначенный для бэкапов (см. задачу 1).
 
-```bash
-pg_dump -h 172.17.0.2 -U postgres test_db > $HOME/docker/volumes/postgres/bckp/test_db_bckp.sql
-```
 
 ```bash
-docker exec -t pg_docker pg_dumpall -c -U postgres \
-> dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql
+docker exec -it postgressql bash
+/# pg_dumpall -c -U postgres > /backup/backup_"`date +"%d-%m-%Y"`"
+/# ls /backup/
+backup_15-04-2024
 ```
 
-![pg_dump test_db](img/hw-db-02-017.png)
+![pg_dump test_db внутри postgressql](img/hw-db-02-021.png)
 
 Остановите контейнер с PostgreSQL, но не удаляйте volumes.
+
+```bash
+docker compose down
+```
+
+![docker compose down postgressql](img/hw-db-02-022.png)
+
+Если не удалить volume c данными, при поднятии контейнера данные снова появяться в новой контейнере автоматически. volume c backup не удаляем
+
+```bash
+docker volume ls
+docker volume rm bd-dev-homeworks_postgressql_data
+docker volume ls
+```
+
+![bd-dev-homeworks_postgressql_data volume remove](img/hw-db-02-023.png)
+
 Поднимите новый пустой контейнер с PostgreSQL.
+
+```bash
+docker compose up
+```
+
+![Новый контейнер postgressql](img/hw-db-02-024.png)
+
 Восстановите БД test_db в новом контейнере.
 
+Проверяем volumes (воссоздался bd-dev-homeworks_postgressql_data) и проверям наличие файла бекапа
+
 ```bash
-docker stop pg_docker
-docker ps -a
-docker run -d --name pg_docker_new \
--e POSTGRES_PASSWORD=postgres \
--p 5432:5432 \
--v $HOME/docker/volumes/postgres/data:/var/lib/postgresql/data \
--v $HOME/docker/volumes/postgres/bckp:/var/lib/postgresql/bckp \
-postgres:12
+docker volume ls
+docker exec -it postgressql bash
+/# ls /backup/
 ```
 
-![pg_docker_new container](img/hw-db-02-018.png)
+![Проверка нового контейнера postgressql](img/hw-db-02-025.png)
+
+Соединяемся с базой и удостоверяемся, что она пустая (данных нет)
+
+```bash
+docker exec -it postgressql psql -U postgres
+```
+
+ПРоверочные команды в командной строке psql клиента
+
+```bash
+\l
+\d+ orders
+\d+ clients
+```
+
+![Проверка нового контейнера postgressql. Таблиц нет](img/hw-db-02-026.png)
+
+
+Восстановление из бекапа на локальном volume
+
+```bash
+docker exec -it postgressql bash
+/# ls /backup/
+psql -U postgres -f /backup/backup_15-04-2024
+```
+
+![Восстановление из Бекапа  на локальном volume](img/hw-db-02-027.png)
+
+Соединяемся с базой test_db и удостоверяемся, что она данные загрузились из бекапа
+
+```bash
+docker exec -it postgressql psql -U postgres test_db
+```
+
+Поверочные команды в командной строке psql клиента
+
+```bash
+\l
+\d+ orders
+\d+ clients
+```
+
+```sql
+SELECT client_last_name,order_name  FROM clients,orders WHERE clients.order_id=orders.order_id;
+```
+
+![Проверка наличия данных в БД test_db](img/hw-db-02-028.png)
 
 Приведите список операций, который вы применяли для бэкапа данных и восстановления. 
-
-> Ответ
-
-Поскольку новый контейнер истользовал те же самые volume структура данных и сами данные стали видны в новом контейнере, тк в него быди подмонтированы аналогичные папки.
-
-При необходимости восстановить данные из бекапа, с отсутсвующими volumes, необходимо выполнить слудующу команду
-
-```bash
-psql -h 172.17.0.2 -U postgres test_db -f $HOME/docker/volumes/postgres/bckp/test_db_bckp.sql
-```
 
 ---
 
@@ -360,4 +417,14 @@ docker inspect postgressql | grep "IPAddress"
 psql -h 172.17.0.2 -U postgres
 ```
 
+Дамп ужаденной базы
 
+```bash
+pg_dump -h 172.17.0.2 -U postgres test_db > $HOME/docker/volumes/postgres/bckp/test_db_bckp.sql
+```
+
+Восстановление удаленной базы
+
+```bash
+psql -h 172.17.0.2 -U postgres test_db -f $HOME/docker/volumes/postgres/bckp/test_db_bckp.sql
+```
