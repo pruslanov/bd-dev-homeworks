@@ -29,7 +29,6 @@ volumes:
 services:
 
   postgressql:
-    #image: postgres:12-bullseye 
     image: postgres:12
     container_name: postgressql
     environment:
