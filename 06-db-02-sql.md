@@ -289,8 +289,8 @@ EXPLAIN (FORMAT YAML) SELECT * FROM clients WHERE order_id IS NOT NULL;
 
 ```bash
 docker exec -it postgressql bash
-pg_dumpall -c -U postgres > /backup/backup_"`date +"%d-%m-%Y"`"
-ls /backup/
+/$ pg_dumpall -c -U postgres > /backup/backup_"`date +"%d-%m-%Y"`"
+/$ ls /backup/
 backup_15-04-2024
 ```
 
@@ -329,7 +329,7 @@ docker compose up
 ```bash
 docker volume ls
 docker exec -it postgressql bash
-ls /backup/
+/$ ls /backup/
 ```
 
 ![Проверка нового контейнера postgressql](img/hw-db-02-025.png)
