@@ -144,7 +144,23 @@ select avg_width from pg_stats where tablename='orders';
 
 Предложите SQL-транзакцию для проведения этой операции.
 
+```sql
+begin;
+    create table orders_new (
+        id integer NOT NULL,
+        title varchar(80) NOT NULL,
+        price integer) partition by range(price);
+    create table orders_less partition of orders_new for values from (0) to (499);
+    create table orders_more partition of orders_new for values from (499) to (99999);
+    insert into orders_new (id, title, price) select * from orders;
+commit;
+```
+
+![Создание partition table](img/hw-db-04-007.png)
+
 Можно ли было изначально исключить ручное разбиение при проектировании таблицы orders?
+
+Необходимо определить тип таблицы в момент проектирования и создания - `partition table`
 
 ## Задача 4
 
