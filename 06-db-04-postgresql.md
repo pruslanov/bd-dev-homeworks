@@ -111,8 +111,28 @@ psql -U postgres -f /backup/test_dump.sql test_database
 
 Подключитесь к восстановленной БД и проведите операцию ANALYZE для сбора статистики по таблице.
 
+```bash
+docker exec -it postgressql13 psql -U postgres test_database
+```
+
 Используя таблицу [pg_stats](https://postgrespro.ru/docs/postgresql/12/view-pg-stats), найдите столбец таблицы `orders` 
 с наибольшим средним значением размера элементов в байтах.
+
+> Сбор статистики по таблице `orders`
+
+```sql
+analyze verbose orders;
+```
+
+![Сбор статистики по таблице orders jоператор analyze](img/hw-db-04-005.png)
+
+> Запрос из таблицы `pg_stats`
+
+```sql
+select avg_width from pg_stats where tablename='orders';
+```
+
+![Запрос из таблицы pg_stats](img/hw-db-04-006.png)
 
 **Приведите в ответе** команду, которую вы использовали для вычисления, и полученный результат.
 
