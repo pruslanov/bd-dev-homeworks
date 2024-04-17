@@ -80,10 +80,26 @@ mysql> select count(*) from orders where price>300;
     - Фамилия "Pretty"
     - Имя "James".
 
+```sql
+CREATE USER 'test' IDENTIFIED WITH mysql_native_password BY 'test-pass'
+WITH MAX_QUERIES_PER_HOUR 100 PASSWORD EXPIRE INTERVAL 180 DAY FAILED_LOGIN_ATTEMPTS 3
+ATTRIBUTE '{"surname": "Pretty", "name": "James"}';
+```
+
 Предоставьте привелегии пользователю `test` на операции SELECT базы `test_db`.
+
+```sql
+GRANT SELECT on test_db.* TO test;
+```
     
 Используя таблицу INFORMATION_SCHEMA.USER_ATTRIBUTES, получите данные по пользователю `test` и 
 **приведите в ответе к задаче**.
+
+```sql
+SELECT * from INFORMATION_SCHEMA.USER_ATTRIBUTES WHERE USER = 'test';
+```
+
+![Создание пользователя, привелегии пользователя, INFORMATION_SCHEMA для test ](img/hw-db-03-004.png)
 
 ## Задача 3
 
