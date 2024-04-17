@@ -220,13 +220,17 @@ mysql> SHOW PROFILES;
 +----------+------------+----------------------------------+
 |        1 | 0.00037450 | SET profiling = 1                |
 |        2 | 0.00335425 | show table status                |
-|        3 | **0.06307050** | alter table orders engine=MyISAM |
-|        4 | **0.03773650** | alter table orders engine=InnoDB |
+|        3 | 0.06307050 | alter table orders engine=MyISAM |
+|        4 | 0.03773650 | alter table orders engine=InnoDB |
 +----------+------------+----------------------------------+
 4 rows in set, 1 warning (0.00 sec)
 
 mysql> 
 ```
+
+|        3 | **0.06307050** | alter table orders engine=MyISAM |
+|        4 | **0.03773650** | alter table orders engine=InnoDB |
+
 
 ## Задача 4 
 
