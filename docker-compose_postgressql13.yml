@@ -1,0 +1,21 @@
+version: '3.9'
+
+volumes:
+  postgressql13_data:
+  backup_postgressql13_data:
+
+services:
+
+  postgressql:
+    #image: postgres:12-bullseye 
+    #image: postgres:12
+    image: postgres:13
+    container_name: postgressql13
+    environment:
+      - PGDATA=/var/lib/postgresql/data/
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgressql13_data:/var/lib/postgresql/data
+      - backup_postgressql13_data:/backup
+      - ./config:/docker-entrypoint-initdb.d
+    network_mode: "host"

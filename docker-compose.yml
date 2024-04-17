@@ -1,21 +1,49 @@
 version: '3.9'
 
 volumes:
-  postgressql13_data:
-  backup_postgressql13_data:
+#  postgressql13_data:
+#  backup_postgressql13_data:
+  dbdata:
 
-services:
+#services:
 
-  postgressql:
+#  mysql_db:
     #image: postgres:12-bullseye 
     #image: postgres:12
-    image: postgres:13
-    container_name: postgressql13
+#    image: mysql:8
+#    container_name: mysql8
+#    environment:
+#      - PGDATA=/var/lib/postgresql/data/
+#      - POSTGRES_PASSWORD=postgres
+#    volumes:
+#      - postgressql13_data:/var/lib/postgresql/data
+#      - backup_postgressql13_data:/backup
+#      - ./config:/docker-entrypoint-initdb.d
+#    network_mode: "host"
+
+
+services:
+  mysql_db:
+    image: mysql:8
+    container_name: mysql8
+    #restart: always
+    ports:
+      - "3306:3306"
     environment:
-      - PGDATA=/var/lib/postgresql/data/
-      - POSTGRES_PASSWORD=postgres
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=stage
+      - MYSQL_USER=example
+      - MYSQL_PASSWORD=password
     volumes:
-      - postgressql13_data:/var/lib/postgresql/data
-      - backup_postgressql13_data:/backup
-      - ./config:/docker-entrypoint-initdb.d
-    network_mode: "host"
+      - dbdata:/var/lib/mysql/
+    #network_mode: host
+
+
+#docker run --name mysql8 -v "C:/Users/vah/docker/08-mssql/db:/var/lib/mysql" -v "C:/Users/vah/docker/08-mssql:/tmp/backup" -e MYSQL_ALLOW_EMPTY_PASSWORD=yes --rm -d mysql:8
+#docker exec -it mysql8 bash
+#mysql -e 'create database test_db;'
+#mysql test_db < /tmp/backup/test_dump.sql
+
+#mkdir /tmp/mysql-data
+#docker run --name mysql8 --rm -v /tmp/mysql-data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=testing -p 3306:3306 -it mysql:8.0

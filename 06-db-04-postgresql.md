@@ -96,7 +96,7 @@ CREATE DATABASE test_database;
 
 Восстановите бэкап БД в `test_database`.
 
-> Переписываем файл бекапа в контейнер
+> Переписываем файл бекапа в контейнер и восстанавливаем из бекапа `test_database`
 
 ```bash
 docker cp /home/ruslanov/projects/bd-dev-homeworks/test_dump.sql  postgressql13:/backup
