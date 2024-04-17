@@ -90,13 +90,14 @@ ATTRIBUTE '{"surname": "Pretty", "name": "James"}';
 
 ```sql
 GRANT SELECT on test_db.* TO test;
+FLUSH PRIVILEGES;
 ```
     
 Используя таблицу INFORMATION_SCHEMA.USER_ATTRIBUTES, получите данные по пользователю `test` и 
 **приведите в ответе к задаче**.
 
 ```sql
-SELECT * from INFORMATION_SCHEMA.USER_ATTRIBUTES WHERE USER = 'test';
+SELECT * FROM INFORMATION_SCHEMA.USER_ATTRIBUTES WHERE USER = 'test';
 ```
 
 ![Создание пользователя, привелегии пользователя, INFORMATION_SCHEMA для test ](img/hw-db-03-004.png)
@@ -108,9 +109,122 @@ SELECT * from INFORMATION_SCHEMA.USER_ATTRIBUTES WHERE USER = 'test';
 
 Исследуйте, какой `engine` используется в таблице БД `test_db` и **приведите в ответе**.
 
+```sql
+show table status\G
+SHOW PROFILES;
+```
+
+![SET profiling ](img/hw-db-03-005.png)
+
 Измените `engine` и **приведите время выполнения и запрос на изменения из профайлера в ответе**:
 - на `MyISAM`,
 - на `InnoDB`.
+
+```sql
+mysql> alter table orders engine=MyISAM;
+
+Query OK, 5 rows affected (0.07 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> SHOW PROFILES;
++----------+------------+----------------------------------+
+| Query_ID | Duration   | Query                            |
++----------+------------+----------------------------------+
+|        1 | 0.00037450 | SET profiling = 1                |
+|        2 | 0.00335425 | show table status                |
+|        3 | 0.06307050 | alter table orders engine=MyISAM |
++----------+------------+----------------------------------+
+3 rows in set, 1 warning (0.00 sec)
+
+mysql> SHOW PROFILE FOR QUERY 3;
++--------------------------------+----------+
+| Status                         | Duration |
++--------------------------------+----------+
+| starting                       | 0.000328 |
+| Executing hook on transaction  | 0.000048 |
+| starting                       | 0.000115 |
+| checking permissions           | 0.000021 |
+| checking permissions           | 0.000028 |
+| init                           | 0.000090 |
+| Opening tables                 | 0.001593 |
+| setup                          | 0.000411 |
+| creating table                 | 0.003472 |
+| waiting for handler commit     | 0.000050 |
+| waiting for handler commit     | 0.005824 |
+| After create                   | 0.003697 |
+| System lock                    | 0.000066 |
+| copy to tmp table              | 0.000483 |
+| waiting for handler commit     | 0.000029 |
+| waiting for handler commit     | 0.000044 |
+| waiting for handler commit     | 0.000128 |
+| rename result table            | 0.000358 |
+| waiting for handler commit     | 0.015184 |
+| waiting for handler commit     | 0.000033 |
+| waiting for handler commit     | 0.005627 |
+| waiting for handler commit     | 0.000042 |
+| waiting for handler commit     | 0.013017 |
+| waiting for handler commit     | 0.000056 |
+| waiting for handler commit     | 0.003228 |
+| end                            | 0.006711 |
+| query end                      | 0.002030 |
+| closing tables                 | 0.000039 |
+| waiting for handler commit     | 0.000194 |
+| freeing items                  | 0.000071 |
+| cleaning up                    | 0.000057 |
++--------------------------------+----------+
+31 rows in set, 1 warning (0.00 sec)
+
+mysql> alter table orders engine=InnoDB;
+Query OK, 5 rows affected (0.03 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> SHOW PROFILE FOR QUERY 4;
++--------------------------------+----------+
+| Status                         | Duration |
++--------------------------------+----------+
+| starting                       | 0.000162 |
+| Executing hook on transaction  | 0.000009 |
+| starting                       | 0.000054 |
+| checking permissions           | 0.000020 |
+| checking permissions           | 0.000043 |
+| init                           | 0.000025 |
+| Opening tables                 | 0.000685 |
+| setup                          | 0.000140 |
+| creating table                 | 0.000268 |
+| After create                   | 0.012627 |
+| System lock                    | 0.000024 |
+| copy to tmp table              | 0.000163 |
+| rename result table            | 0.001399 |
+| waiting for handler commit     | 0.000013 |
+| waiting for handler commit     | 0.002241 |
+| waiting for handler commit     | 0.000011 |
+| waiting for handler commit     | 0.010043 |
+| waiting for handler commit     | 0.000016 |
+| waiting for handler commit     | 0.004720 |
+| waiting for handler commit     | 0.000044 |
+| waiting for handler commit     | 0.000432 |
+| end                            | 0.001149 |
+| query end                      | 0.003250 |
+| closing tables                 | 0.000042 |
+| waiting for handler commit     | 0.000053 |
+| freeing items                  | 0.000061 |
+| cleaning up                    | 0.000047 |
++--------------------------------+----------+
+27 rows in set, 1 warning (0.00 sec)
+
+mysql> SHOW PROFILES;
++----------+------------+----------------------------------+
+| Query_ID | Duration   | Query                            |
++----------+------------+----------------------------------+
+|        1 | 0.00037450 | SET profiling = 1                |
+|        2 | 0.00335425 | show table status                |
+|        3 | 0.06307050 | alter table orders engine=MyISAM |
+|        4 | 0.03773650 | alter table orders engine=InnoDB |
++----------+------------+----------------------------------+
+4 rows in set, 1 warning (0.00 sec)
+
+mysql> 
+```
 
 ## Задача 4 
 
