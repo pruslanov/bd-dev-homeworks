@@ -228,9 +228,9 @@ mysql> SHOW PROFILES;
 mysql> 
 ```
 
-|        3 | **0.06307050** | alter table orders engine=MyISAM |
+Duration **0.06307050** | alter table orders engine=MyISAM |
 
-|        4 | **0.03773650** | alter table orders engine=InnoDB |
+Duration **0.03773650** | alter table orders engine=InnoDB |
 
 
 ## Задача 4 
